@@ -48,6 +48,13 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " Can I have different highlighting for different file extensions?
 " See here: https://github.com/scrooloose/nerdtree/issues/433#issuecomment-92590696
 
+"
+" Erlang (loaded ondemand)
+"
+Plug 'vim-erlang/vim-erlang-runtime',      {'for': 'erlang'}
+Plug 'vim-erlang/vim-erlang-compiler',     {'for': 'erlang'}
+Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
+Plug 'vim-erlang/vim-erlang-tags',         {'for': 'erlang'}
 
 "
 " Syntax Highlighting
