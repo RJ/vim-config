@@ -25,14 +25,18 @@ let g:airline_right_sep = '◀'
 "
 " Fuzzy Finder
 "
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-" search for file in git
-map <leader>a :GFiles<cr>
-map <C-p> :GFiles<cr>
-" search for any file
-map <leader>A :FZF<cr>
-map <C-P> :FZF<cr>
+Plug 'ctrlpvim/ctrlp.vim'
+map <leader>a :CtrlP<cr>
+let g:ctrlp_dotfiles = 0
+let g:ctrlp_custom_ignore = {
+  \ 'file': '\v\.(beam|app|o|so|pyc)$',
+  \ 'dir': '\v/\.(node_modules|DS_Store|_build|git|kitchen)$',
+  \ }
+" search by filename not full path by default. (<c-d> in prompt to toggle)
+let g:ctrlp_by_filename = 1
+" include current file in match entries, in case i forget what file i'm
+" editing and try to select it only to be confused why it's not found.
+let g:ctrlp_match_current_file = 1
 
 "
 " NERDTree
@@ -42,7 +46,7 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on':  'NERDTreeToggle' }
 " shortcut
 map <F2> :NERDTreeToggle<cr>
-let NERDTreeIgnore=['\.beam$', '\.dump$', '\.pyc', '\~$', '^\.', '^_rel']
+let NERDTreeIgnore=['^ebin$', '\.beam$', '\.dump$', '\.pyc', '\~$', '^\.', '^_rel', '^_build', '\.gz$', '\.tar$', '\.bz2$', '\.zip$']
 " close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " Can I have different highlighting for different file extensions?
