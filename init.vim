@@ -87,12 +87,15 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-
 "
 " /end Plug stuff
 "
 call plug#end()
 
+
+" ,vimrc to open, and auto-source on save
+map <leader>vimrc :tabe $MYVIMRC<cr>
+autocmd bufwritepost .vimrc source $MYVIMRC
 
 " delete line, yanking to blackhole register instead of clipboard
 map xd "_dd
