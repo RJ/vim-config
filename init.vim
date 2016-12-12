@@ -104,6 +104,9 @@ map xd "_dd
 vnoremap < <gv
 vnoremap > >gv
 
+set relativenumber
+set number
+
 " ,<space> clears search result highlights etc
 map <leader><space> :let @/=''<cr>
 
