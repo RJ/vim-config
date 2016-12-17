@@ -1,11 +1,37 @@
 let mapleader = ","
+set encoding=utf8
 
 call plug#begin('~/.vim/plugged')
+
+
+"
+" easy toggle comments
+"
+Plug 'scrooloose/nerdcommenter'
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
 
 "
 " Git gutter
 "
 Plug 'airblade/vim-gitgutter'
+
+"
+" Open buffers across the top
+"
+"Plug 'fholgado/minibufexpl'
+Plug 'git@github.com:fholgado/minibufexpl.vim.git'
+map <Leader>bt :MBEToggle<cr>
+map <Leader>bn :MBEbn<cr>
+map <Leader>bp :MBEbp<cr>
+" 3gb -> go to buf 3
+let c = 1
+while c <= 99
+  execute "nnoremap " . c . "gb :" . c . "b\<CR>"
+  let c += 1
+endwhile
 
 "
 " Colour theme
@@ -17,16 +43,18 @@ Plug 'tomasr/molokai'
 "
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
+let g:airline_powerline_fonts = 1
+"let g:airline_left_sep = '»'
+"let g:airline_left_sep = '▶'
+"let g:airline_right_sep = '«'
+"let g:airline_right_sep = '◀'
 
 "
 " Fuzzy Finder
 "
 Plug 'ctrlpvim/ctrlp.vim'
 map <leader>a :CtrlP<cr>
+map <c-p> :CtrlP<cr>
 let g:ctrlp_dotfiles = 0
 let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(beam|app|o|so|pyc)$',
@@ -49,8 +77,9 @@ map <F2> :NERDTreeToggle<cr>
 let NERDTreeIgnore=['^ebin$', '\.beam$', '\.dump$', '\.pyc', '\~$', '^\.', '^_rel', '^_build', '\.gz$', '\.tar$', '\.bz2$', '\.zip$']
 " close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" Can I have different highlighting for different file extensions?
-" See here: https://github.com/scrooloose/nerdtree/issues/433#issuecomment-92590696
+" Hide the [] around the git status indicator for nerdtree git plugin
+"autocmd FileType nerdtree syntax match hideBracketsInNerdTree "\]" contained conceal containedin=ALL
+"autocmd FileType nerdtree syntax match hideBracketsInNerdTree ".\[" contained conceal containedin=ALL
 
 "
 " Erlang (loaded ondemand)
@@ -59,6 +88,28 @@ Plug 'vim-erlang/vim-erlang-runtime',      {'for': 'erlang'}
 Plug 'vim-erlang/vim-erlang-compiler',     {'for': 'erlang'}
 Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
 Plug 'vim-erlang/vim-erlang-tags',         {'for': 'erlang'}
+
+"
+" Use tab for clever omni complete
+"
+Plug 'ervandew/supertab'
+set completeopt=longest,menuone
+" change the behavior of the <Enter> key when the popup menu is visible:
+" the Enter key will simply select the highlighted menu item, just as <C-Y> does
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" the first will make <C-N> work the way it normally does; however, when the
+" menu appears, the <Down> key will be simulated. What this accomplishes is it
+" keeps a menu item always highlighted. This way you can keep typing characters
+" to narrow the matches, and the nearest match will be selected so that you can
+" hit Enter at any time to insert it. In the above mappings, the second one is
+" a little more exotic: it simulates <C-X><C-O> to bring up the omni completion
+" menu, then it simulates <C-N><C-P> to remove the longest common text, and
+" finally it simulates <Down> again to keep a match highlighted.
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' : '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' : '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
 
 "
 " Syntax Highlighting
@@ -76,7 +127,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 "
 " Jump between notable markers etc
 "
-Plug 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-unimpaired'
 
 "
 " Easy Align
@@ -88,9 +139,22 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 "
+" Use patched fonts with extra glyphs in various plugins
+"
+Plug 'ryanoasis/vim-devicons'
+
+"
 " /end Plug stuff
 "
 call plug#end()
+
+set tabstop=4
+set expandtab
+set shiftwidth=0 " default to tabstop amount
+
+set cursorline
+
+au FileType yaml setl tabstop=2 expandtab
 
 
 " ,vimrc to open, and auto-source on save
@@ -122,11 +186,11 @@ inoremap <F1> <ESC>:set invfullscreen<CR>a
 nnoremap <F1> :set invfullscreen<CR>
 vnoremap <F1> :set invfullscreen<CR>
 
-" easier buffer navigation
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+" They see me scrolling..
+map <C-j> j<C-e>
+map <C-k> k<C-y>
+map <C-h> 10<C-e>10j
+map <C-l> 10<C-y>10k
 
 " use the same symbols as TextMate for tabstops and EOLs
 set list
@@ -137,18 +201,17 @@ set background=dark
 colorscheme molokai
 set colorcolumn=80
 
+if has("gui_macvim")
+	" Full screen on macvim should fully maxed out
+	set guifont=Inconsolata\ For\ Powerline\ Nerd\ Font\ Complete:h16
+	set fuopt=maxvert,maxhorz
+end
+
 if has('gui_running')
-    set guifont=Menlo:h14
     set go-=T
     set go-=l
     set go-=L
     set go-=r
     set go-=R
-    if has("gui_macvim")
-        " Full screen on macvim should fully maxed out
-        set fuopt=maxvert,maxhorz
-    else
-        set guifont=DejaVu\ Sans\ Mono\ 13
-    end
 endif
 
