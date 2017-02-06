@@ -152,6 +152,21 @@ set tabstop=4
 set expandtab
 set shiftwidth=0 " default to tabstop amount
 
+function DetectTabsOrSpaces()
+    " Determines whether to use spaces or tabs on the current buffer.
+    if getfsize(bufname("%")) > 1000000
+        " File is > 1meg, use default
+        return
+    endif
+    let numTabs=len(filter(getbufline(bufname("%"), 1, 250), 'v:val =~ "^\\t"'))
+    let numSpaces=len(filter(getbufline(bufname("%"), 1, 250), 'v:val =~ "^ "'))
+    if numTabs > numSpaces
+        setlocal noexpandtab
+    endif
+endfunction
+" detect tabs or spaces after opening a buffer
+autocmd BufReadPost * call DetectTabsOrSpaces()
+
 set cursorline
 
 au FileType yaml setl tabstop=2 expandtab
