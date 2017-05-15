@@ -3,6 +3,20 @@ set encoding=utf8
 
 call plug#begin('~/.vim/plugged')
 
+" No need for :set paste
+Plug 'ConradIrwin/vim-bracketed-paste'
+
+" Track the engine.
+Plug 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 "
 " easy toggle comments
@@ -90,13 +104,19 @@ Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
 Plug 'vim-erlang/vim-erlang-tags',         {'for': 'erlang'}
 
 "
+" Golang
+"
+Plug 'fatih/vim-go'
+
+
+"
 " Use tab for clever omni complete
 "
-Plug 'ervandew/supertab'
-set completeopt=longest,menuone
+"""Plug 'ervandew/supertab'
+"""set completeopt=longest,menuone
 " change the behavior of the <Enter> key when the popup menu is visible:
 " the Enter key will simply select the highlighted menu item, just as <C-Y> does
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"""inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " the first will make <C-N> work the way it normally does; however, when the
 " menu appears, the <Down> key will be simulated. What this accomplishes is it
@@ -106,9 +126,9 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " a little more exotic: it simulates <C-X><C-O> to bring up the omni completion
 " menu, then it simulates <C-N><C-P> to remove the longest common text, and
 " finally it simulates <Down> again to keep a match highlighted.
-inoremap <expr> <C-n> pumvisible() ? '<C-n>' : '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+"""inoremap <expr> <C-n> pumvisible() ? '<C-n>' : '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
-inoremap <expr> <M-,> pumvisible() ? '<C-n>' : '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+"""inoremap <expr> <M-,> pumvisible() ? '<C-n>' : '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 
 "
@@ -171,6 +191,7 @@ set cursorline
 
 au FileType yaml setl tabstop=2 expandtab
 
+autocmd BufNewFile,BufRead Jenkinsfile    set filetype=groovy
 
 " ,vimrc to open, and auto-source on save
 map <leader>vimrc :tabe $MYVIMRC<cr>
