@@ -3,14 +3,16 @@ set encoding=utf8
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'nathangrigg/vim-beancount'
+
 " No need for :set paste
 Plug 'ConradIrwin/vim-bracketed-paste'
 
 " Track the engine.
-Plug 'SirVer/ultisnips'
+""Plug 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
-Plug 'honza/vim-snippets'
+"Plug 'honza/vim-snippets'
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -98,10 +100,10 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 "
 " Erlang (loaded ondemand)
 "
-Plug 'vim-erlang/vim-erlang-runtime',      {'for': 'erlang'}
-Plug 'vim-erlang/vim-erlang-compiler',     {'for': 'erlang'}
-Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
-Plug 'vim-erlang/vim-erlang-tags',         {'for': 'erlang'}
+""Plug 'vim-erlang/vim-erlang-runtime',      {'for': 'erlang'}
+""Plug 'vim-erlang/vim-erlang-compiler',     {'for': 'erlang'}
+""Plug 'vim-erlang/vim-erlang-omnicomplete', {'for': 'erlang'}
+""Plug 'vim-erlang/vim-erlang-tags',         {'for': 'erlang'}
 
 "
 " Golang
@@ -134,15 +136,20 @@ Plug 'fatih/vim-go'
 "
 " Syntax Highlighting
 "
-Plug 'vim-syntastic/syntastic'
+""Plug 'vim-syntastic/syntastic'
 " Python stuff
-let python_highlight_all=1
-let g:syntastic_python_flake8_args='--max-complexity=10 --max-line-length=110 --ignore=W191'
-let g:syntastic_python_checkers=['flake8']
-let g:syntastic_check_on_open=1
+""let python_highlight_all=1
+""let g:syntastic_python_flake8_args='--max-complexity=10 --max-line-length=110 --ignore=W191'
+""let g:syntastic_python_checkers=['flake8']
+""let g:syntastic_check_on_open=1
 "let g:syntastic_enable_signs=0
 " eslint best for es6 js
-let g:syntastic_javascript_checkers = ['eslint']
+""let g:syntastic_javascript_checkers = ['eslint']
+
+let g:ale_linters = {
+\   'erlang': ['syntaxerl'],
+\}
+Plug 'w0rp/ale'
 
 "
 " Jump between notable markers etc
